@@ -167,7 +167,10 @@ st_eval(+(Expr), Scope, Options, Value):- !,
 % Scope get.
 
 st_eval(Term, Scope, Options, Value):-
-    Term =.. ['.', Base, Name], !,
+    (compound(Term) ->
+        compound_name_arguments(Term, '.', [Base, Name]), !
+    ;
+        Term =.. ['.', Base, Name], !),
     st_eval(Base, Scope, Options, Tmp),
     '.'(Tmp, Name, Value).
 
@@ -361,7 +364,7 @@ test_equality_string(String, Value):-
         String = TestString).
 
 function_call(Fun, Scope, Options, Value):-
-    Fun =.. [Name|Args],
+    compound_name_arguments(Fun, Name, Args),
     length(Args, Arity),
     (   user_function(Name, Arity, Goal)
     ->  st_eval_list(Args, Scope, Options, Vals),

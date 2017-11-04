@@ -1,5 +1,6 @@
 :- begin_tests(st_expr).
 
+:- use_module(library(yall)).
 :- use_module(prolog/st/st_expr).
 :- use_module(point).
 
@@ -114,6 +115,10 @@ test(inequality_3):-
 
 test(inequality_4):-
     st_eval(atom(a) \= "a", _{}, _{}, 0).
+
+test(zero_arity_compound):-
+    st_set_function(zero_arity, 0, [Out]>>(Out = [])),
+    st_eval(zero_arity(), _{}, _{}, []).
 
 test(less_than_equal_true):-
     st_eval(1 =< 2, _{}, _{}, 1).
